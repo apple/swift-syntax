@@ -139,11 +139,11 @@ extension Parser {
 
     let argument: RawAttributeSyntax.Argument
     do {
-      if self.peek().tokenKind == .integerLiteral {
+      let tokenKind = self.peek().tokenKind
+      switch tokenKind {
+      case .integerLiteral, .floatingLiteral:
         argument = .availability(self.parseAvailabilitySpecList(from: .available))
-      } else if self.peek().tokenKind  == .floatingLiteral {
-        argument = .availability(self.parseAvailabilitySpecList(from: .available))
-      } else {
+      default:
         argument = .availability(self.parseExtendedAvailabilitySpecList())
       }
     }

@@ -251,6 +251,89 @@ final class AttributeTests: XCTestCase {
     )
   }
 
+  func testIgnoreDeprecationAttribute() throws {
+    AssertParse("""
+    @available(*, deprecated)
+    class XClass {
+      var num: Int
+      init(_ num: Int) { self.num = num }
+    }
+    
+    @ignoreDeprecations(XClass)
+    func x() {
+      print(XClass(3))
+    }
+    """)
+
+    AssertParse("""
+    struct DeviceConf: Codable {
+
+      enum DeviceStatus: Codable {
+        case sandboxed
+        case partiallyEscaped
+        case fullyUnsandboxed
+      }
+
+      var isAMFIEnabled: Bool
+      var bootArgs: [String]
+
+      @available(*, deprecated)
+      var status: DeviceStatus
+
+      @ignoreDeprecation(status)
+      var canStartSession: Bool {
+        return status == .fullyUnsandboed
+      }
+    }
+    
+    """)
+
+    AssertParse("""
+    
+    @available(*, deprecated)
+    func deprecatedFunction() -> Int32 {
+      return 3
+    }
+    
+    @ignoreDeprecation(deprecatedFunction)
+    class StateManager {
+    
+      func someFunction() {
+        print(deprecatedFunction())
+      }
+    }
+    """)
+    
+    
+    AssertParse("""
+    enum GoatAlbums {
+      case afterHours
+      case theLifeOfPablo
+      case toPimpAButterfly
+
+      @available(*, deprecated)
+      case graduation
+    }
+    
+    @ignoreDeprecation(GoatAlbums.graduation)
+    func printBestAlbum() {
+      print(GoatAlbums.graduation)
+    }
+    """)
+
+    AssertParse("""
+    struct XStruct {
+      @available(*, deprecated)
+      var x: Int
+    }
+    
+    @ignoreDeprecation(XStruct.x)
+    extension XStruct {
+      func _example() -> Int { return x * 2 }
+    }
+    """)
+  }
+
   func testObjcImplementationAttribute() throws {
     AssertParse("""
       @_objcImplementation extension MyClass {
