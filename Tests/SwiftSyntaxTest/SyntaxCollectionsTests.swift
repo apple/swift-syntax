@@ -146,4 +146,17 @@ public class SyntaxCollectionsTests: XCTestCase {
     XCTAssertEqual("\(relems[1])", "1")
     XCTAssertEqual("\(relems[0])", "2")
   }
+
+  public func testKeyPathInParent() throws {
+    let arrayElementList = ArrayElementListSyntax([
+      integerLiteralElement(0),
+      integerLiteralElement(1),
+      integerLiteralElement(2),
+    ])
+
+    let element = arrayElementList[1]
+    let keyPath = try XCTUnwrap(element.keyPathInParent)
+    XCTAssert(type(of: keyPath).rootType == ArrayElementListSyntax.self)
+    XCTAssert(type(of: keyPath).valueType == ArrayElementSyntax.self)
+  }
 }
