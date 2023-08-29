@@ -46,6 +46,18 @@ public struct SyntaxIndexInTree: Comparable, Hashable {
   }
 }
 
+/// Uniquely identifies a syntax tree.
+struct RootID: Hashable {
+  /// The pointer value of the root.
+  ///
+  /// Since the root ID might outlive the tree, it is not unsafe to access this.
+  private var id: UInt
+
+  fileprivate init(_ pointer: UnsafeRawPointer) {
+    self.id = UInt(bitPattern: pointer)
+  }
+}
+
 /// Provides a stable and unique identity for ``Syntax`` nodes.
 ///
 /// Note that two nodes might have the same contents even if their IDs are
@@ -64,7 +76,7 @@ public struct SyntaxIdentifier: Hashable {
   /// same instance. This guarantees that the trees with the same 'rootId' have
   /// exact the same structure. But, two trees with exactly the same structure
   /// might still have different 'rootId's.
-  let rootId: UInt
+  let rootId: RootID
 
   /// Unique value for a node within its own tree.
   @_spi(RawSyntax)
@@ -82,7 +94,7 @@ public struct SyntaxIdentifier: Hashable {
 
   static func forRoot(_ raw: RawSyntax) -> SyntaxIdentifier {
     return .init(
-      rootId: UInt(bitPattern: raw.pointer),
+      rootId: RootID(raw.pointer),
       indexInTree: .zero
     )
   }
