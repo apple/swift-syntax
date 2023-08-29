@@ -10,33 +10,56 @@
 //
 //===----------------------------------------------------------------------===//
 
+class Wrapper<T> {
+  var value: T
+
+  init(_ value: T) {
+    self.value = value
+  }
+
+  var pointer: UnsafeMutablePointer<T> {
+    return withUnsafeMutablePointer(to: &value) { $0 }
+  }
+}
+
 /// A Syntax node represents a tree of nodes with tokens at the leaves.
 /// Each node has accessors for its known children, and allows efficient
 /// iteration over the children through its `children` property.
 public struct Syntax: SyntaxProtocol, SyntaxHashable {
   fileprivate enum Info {
-    case root(Root)
+    case root(Wrapper<Root>)
     indirect case nonRoot(NonRoot)
 
     // For root node.
     struct Root {
       var arena: SyntaxArena
+
+      init(arena: SyntaxArena) {
+        self.arena = arena
+      }
     }
 
     // For non-root nodes.
     struct NonRoot {
       var parent: Syntax
       var absoluteInfo: AbsoluteSyntaxInfo
+      var rootInfo: UnsafeMutablePointer<Root>
+
+      init(parent: Syntax, absoluteInfo: AbsoluteSyntaxInfo, rootInfo: UnsafeMutablePointer<Root>) {
+        self.parent = parent
+        self.absoluteInfo = absoluteInfo
+        self.rootInfo = rootInfo
+      }
     }
   }
 
   private let info: Info
   let raw: RawSyntax
 
-  private var rootInfo: Info.Root {
+  private var rootInfo: UnsafeMutablePointer<Info.Root> {
     switch info {
-    case .root(let info): return info
-    case .nonRoot(let info): return info.parent.rootInfo
+    case .root(let info): return info.pointer
+    case .nonRoot(let info): return info.rootInfo
     }
   }
 
@@ -101,7 +124,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   }
 
   init(_ raw: RawSyntax, parent: Syntax, absoluteInfo: AbsoluteSyntaxInfo) {
-    self.init(raw, info: .nonRoot(.init(parent: parent, absoluteInfo: absoluteInfo)))
+    self.init(raw, info: .nonRoot(.init(parent: parent, absoluteInfo: absoluteInfo, rootInfo: parent.rootInfo)))
   }
 
   /// Creates a `Syntax` with the provided raw syntax and parent.
@@ -121,7 +144,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   ///     has a chance to retain it.
   static func forRoot(_ raw: RawSyntax, rawNodeArena: SyntaxArena) -> Syntax {
     precondition(rawNodeArena === raw.arena)
-    return Syntax(raw, info: .root(.init(arena: rawNodeArena)))
+    return Syntax(raw, info: .root(Wrapper(Info.Root(arena: rawNodeArena))))
   }
 
   /// Returns the child data at the provided index in this data's layout.
