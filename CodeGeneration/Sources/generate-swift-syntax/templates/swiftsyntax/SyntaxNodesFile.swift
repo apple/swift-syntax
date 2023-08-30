@@ -71,9 +71,9 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           \(node.generateInitializerDeclHeader())
           """
         ) {
-          let parameters = ClosureParameterListSyntax {
+          let parameters = TupleExprSyntax {
             for child in node.children {
-              ClosureParameterSyntax(firstName: child.varOrCaseName.backtickedIfNeeded)
+              LabeledExprSyntax(expression: ExprSyntax("Syntax(\(child.varOrCaseName.backtickedIfNeeded))"))
             }
           }
 
@@ -103,7 +103,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
             calledExpression: ExprSyntax("withExtendedLifetime"),
             leftParen: .leftParenToken(),
             arguments: LabeledExprListSyntax {
-              LabeledExprSyntax(expression: ExprSyntax("(SyntaxArena(), (\(parameters)))"))
+              LabeledExprSyntax(expression: ExprSyntax("(SyntaxArena(), \(parameters))"))
             },
             rightParen: .rightParenToken(),
             trailingClosure: ClosureExprSyntax(signature: closureSignature) {
