@@ -15,28 +15,28 @@
 public struct SyntaxIndexInTree: Comparable, Hashable {
   let indexInTree: UInt32
 
-  static var zero: SyntaxIndexInTree = SyntaxIndexInTree(indexInTree: 0)
+  static var zero: SyntaxIndexInTree = SyntaxIndexInTree(0)
 
   /// Assuming that this index points to the start of ``Raw``, so that it points
   /// to the next sibling of ``Raw``.
   func advancedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
     let newIndexInTree = self.indexInTree + UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
-    return .init(indexInTree: newIndexInTree)
+    return .init(newIndexInTree)
   }
 
   /// Assuming that this index points to the next sibling of ``Raw``, reverse it
   /// so that it points to the start of ``Raw``.
   func reversedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
     let newIndexInTree = self.indexInTree - UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
-    return .init(indexInTree: newIndexInTree)
+    return .init(newIndexInTree)
   }
 
   func advancedToFirstChild() -> SyntaxIndexInTree {
     let newIndexInTree = self.indexInTree + 1
-    return .init(indexInTree: newIndexInTree)
+    return .init(newIndexInTree)
   }
 
-  init(indexInTree: UInt32) {
+  init(_ indexInTree: UInt32) {
     self.indexInTree = indexInTree
   }
 

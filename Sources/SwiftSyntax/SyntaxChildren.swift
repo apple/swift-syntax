@@ -222,7 +222,7 @@ struct RawSyntaxChildren: BidirectionalCollection {
       let offset = startIndex.offset + UInt32(parent.totalLength.utf8Length)
       let indexInParent = startIndex.indexInParent + UInt32(parentLayoutView.children.count)
       let indexInTree = startIndex.indexInTree.indexInTree + UInt32(parent.totalNodes) - 1
-      let syntaxIndexInTree = SyntaxIndexInTree(indexInTree: indexInTree)
+      let syntaxIndexInTree = SyntaxIndexInTree(indexInTree)
       let materialized = SyntaxChildrenIndex(
         offset: offset,
         indexInParent: indexInParent,
