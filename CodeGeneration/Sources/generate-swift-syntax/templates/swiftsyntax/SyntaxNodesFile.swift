@@ -80,17 +80,18 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
               )
             )
           )
-          let layoutList = ArrayExprSyntax {
-            for child in node.children {
-              ArrayElementSyntax(
-                expression: MemberAccessExprSyntax(
-                  base: child.buildableType.optionalChained(expr: ExprSyntax("\(child.varOrCaseName.backtickedIfNeeded)")),
-                  period: .periodToken(),
-                  name: "raw"
-                )
-              )
-            }
-          }
+          VariableDeclSyntax(
+            .let,
+            name: "nodes",
+            type: TypeAnnotationSyntax(type: TypeSyntax("[Syntax?]")),
+            initializer: InitializerClauseSyntax(
+              value: ArrayExprSyntax {
+                for child in node.children {
+                  ArrayElementSyntax(expression: ExprSyntax("Syntax(\(child.varOrCaseName.backtickedIfNeeded))"))
+                }
+              }
+            )
+          )
 
           let initializer = FunctionCallExprSyntax(
             calledExpression: ExprSyntax("withExtendedLifetime"),
@@ -103,12 +104,11 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
               if node.children.isEmpty {
                 DeclSyntax("let raw = RawSyntax.makeEmptyLayout(kind: SyntaxKind.\(node.varOrCaseName), arena: arena)")
               } else {
-                DeclSyntax("let layout: [RawSyntax?] = \(layoutList)")
                 DeclSyntax(
                   """
                   let raw = RawSyntax.makeLayout(
                     kind: SyntaxKind.\(node.varOrCaseName),
-                    from: layout,
+                    from: nodes,
                     arena: arena,
                     leadingTrivia: leadingTrivia,
                     trailingTrivia: trailingTrivia
@@ -131,18 +131,6 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
             rightOperand: initializer
           )
 
-          VariableDeclSyntax(
-            .let,
-            name: "nodes",
-            type: TypeAnnotationSyntax(type: TypeSyntax("[Syntax?]")),
-            initializer: InitializerClauseSyntax(
-              value: ArrayExprSyntax {
-                for child in node.children {
-                  ArrayElementSyntax(expression: ExprSyntax("Syntax(\(child.varOrCaseName.backtickedIfNeeded))"))
-                }
-              }
-            )
-          )
           ExprSyntax("Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))")
         }
 
@@ -202,7 +190,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
                   collection = col.layoutView!.appending(element.raw, arena: arena)
                 } else {
                   collection = RawSyntax.makeLayout(kind: SyntaxKind.\(childNode.varOrCaseName),
-                                                    from: [element.raw], arena: arena)
+                                                    from: [Syntax(element)], arena: arena)
                 }
                 return Syntax(self)
                   .replacingChild(at: \(raw: index), with: collection, rawNodeArena: arena, allocationArena: arena)
