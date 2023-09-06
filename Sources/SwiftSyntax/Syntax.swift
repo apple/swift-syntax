@@ -20,7 +20,7 @@ public enum SyntaxNodeStructure {
   /// The node contains a fixed number of children which can be accessed by these key paths.
   case layout([AnyKeyPath])
 
-  /// The node is a `SyntaxCollection` of the given type.
+  /// The node is a `SyntaxCollection` with elements of the given type.
   case collection(SyntaxProtocol.Type)
 
   /// The node can contain a single node with one of the listed types.
@@ -381,10 +381,14 @@ public extension SyntaxProtocol {
     guard let parent = self.parent else {
       return nil
     }
-    guard case .layout(let childrenKeyPaths) = parent.kind.syntaxNodeType.structure else {
-      return nil
+    switch parent.kind.syntaxNodeType.structure {
+    case .layout(let childrenKeyPaths):
+      return childrenKeyPaths[data.indexInParent]
+    case .collection(_):
+      return (parent.asProtocol(SyntaxProtocol.self) as! any SyntaxCollection).keyPath(for: self.index)
+    case .choices:
+      preconditionFailure("The parent of a syntax node should always be a concrete node and not one with choices")
     }
-    return childrenKeyPaths[data.indexInParent]
   }
 
   @available(*, deprecated, message: "Use previousToken(viewMode:) instead")
@@ -970,3 +974,12 @@ extension ReversedTokenSequence: CustomReflectable {
 /// replaced by the ``Syntax`` type.
 @available(*, unavailable, message: "use 'Syntax' instead")
 public struct SyntaxNode {}
+
+extension SyntaxCollection {
+  /// Implementation detail of ``SyntaxProtocol/keyPathInParent``.
+  ///
+  /// I couldn't find a way to express this without an extension on ``SyntaxCollection``.
+  fileprivate func keyPath(for index: SyntaxChildrenIndex) -> AnyKeyPath {
+    return \Self[index]
+  }
+}
