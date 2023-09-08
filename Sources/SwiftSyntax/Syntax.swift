@@ -33,9 +33,11 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     // For root node.
     struct Root {
       var arena: SyntaxArena
+      var syntaxTracking: SyntaxTracking?
 
-      init(arena: SyntaxArena) {
+      init(arena: SyntaxArena, syntaxTracking: SyntaxTracking?) {
         self.arena = arena
+        self.syntaxTracking = syntaxTracking
       }
     }
 
@@ -97,6 +99,18 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     absoluteInfo.nodeId
   }
 
+  var syntaxTracking: SyntaxTracking? {
+    rootInfo.pointee.syntaxTracking
+  }
+
+  /// Set the translation ranges of the entire tree.
+  ///
+  /// Must only be called once for every tree.
+  func setSyntaxTrackingOfTree(_ syntaxTracking: SyntaxTracking?) {
+    precondition(rootInfo.pointee.syntaxTracking == nil)
+    rootInfo.pointee.syntaxTracking = syntaxTracking
+  }
+
   /// The position of the start of this node's leading trivia
   public var position: AbsolutePosition {
     AbsolutePosition(utf8Offset: Int(absoluteInfo.offset))
@@ -144,7 +158,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   ///     has a chance to retain it.
   static func forRoot(_ raw: RawSyntax, rawNodeArena: SyntaxArena) -> Syntax {
     precondition(rawNodeArena === raw.arena)
-    return Syntax(raw, info: .root(Wrapper(Info.Root(arena: rawNodeArena))))
+    return Syntax(raw, info: .root(Wrapper(Info.Root(arena: rawNodeArena, syntaxTracking: nil))))
   }
 
   /// Returns the child data at the provided index in this data's layout.
@@ -215,7 +229,18 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   /// `newChild` has been addded to the result.
   func replacingChild(at index: Int, with newChild: Syntax?, arena: SyntaxArena) -> Syntax {
     return withExtendedLifetime(newChild) {
-      return replacingChild(at: index, with: newChild?.raw, rawNodeArena: newChild?.raw.arena, allocationArena: arena)
+      let result = replacingChild(at: index, with: newChild?.raw, rawNodeArena: newChild?.raw.arena, allocationArena: arena)
+      if trackedTree != nil {
+        var iter = RawSyntaxChildren(absoluteRaw).makeIterator()
+        for _ in 0..<index { _ = iter.next() }
+        let (raw, info) = iter.next()!
+        result.rootInfo.pointee.syntaxTracking = syntaxTracking?.replacing(
+          oldIndexInTree: info.nodeId.indexInTree,
+          oldTotalNodes: raw?.totalNodes ?? 0,
+          by: newChild
+        )
+      }
+      return result
     }
   }
 

@@ -29,6 +29,7 @@ add_swift_host_library(SwiftSyntax
   SyntaxNodeStructure.swift
   SyntaxProtocol.swift
   SyntaxText.swift
+  SyntaxTracking.swift
   SyntaxTreeViewMode.swift
   TokenDiagnostic.swift
   TokenSequence.swift
