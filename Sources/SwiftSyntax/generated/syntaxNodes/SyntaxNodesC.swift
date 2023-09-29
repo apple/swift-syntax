@@ -47,12 +47,13 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExpr
       _ unexpectedBetweenVersionInfoAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeCanImportKeyword, 
             canImportKeyword, 
             unexpectedBetweenCanImportKeywordAndLeftParen, 
@@ -254,12 +255,13 @@ public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _L
       _ unexpectedBetweenColonAndVersion: UnexpectedNodesSyntax? = nil,
       version: VersionTupleSyntax,
       _ unexpectedAfterVersion: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeComma, 
             comma, 
             unexpectedBetweenCommaAndLabel, 
@@ -433,12 +435,13 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
       _ unexpectedBetweenCatchItemsAndBody: UnexpectedNodesSyntax? = nil,
       body: CodeBlockSyntax,
       _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeCatchKeyword, 
             catchKeyword, 
             unexpectedBetweenCatchKeywordAndCatchItems, 
@@ -607,12 +610,13 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforePattern, 
             pattern, 
             unexpectedBetweenPatternAndWhereClause, 
@@ -797,12 +801,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
       memberBlock: MemberBlockSyntax,
       _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeAttributes, 
             attributes, 
             unexpectedBetweenAttributesAndModifiers, 
@@ -1121,12 +1126,13 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _L
       _ unexpectedBeforeClassKeyword: UnexpectedNodesSyntax? = nil,
       classKeyword: TokenSyntax = .keyword(.class),
       _ unexpectedAfterClassKeyword: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeClassKeyword, classKeyword, unexpectedAfterClassKeyword))) { (arena, _) in
+    self = withExtendedLifetime((arena, (unexpectedBeforeClassKeyword, classKeyword, unexpectedAfterClassKeyword))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeClassKeyword?.raw, classKeyword.raw, unexpectedAfterClassKeyword?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.classRestrictionType,
@@ -1208,12 +1214,13 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
       _ unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? = nil,
       rightSquare: TokenSyntax = .rightSquareToken(),
       _ unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeLeftSquare, 
             leftSquare, 
             unexpectedBetweenLeftSquareAndItems, 
@@ -1388,12 +1395,13 @@ public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Le
       _ unexpectedBetweenDetailAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax? = nil,
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeSpecifier, 
             specifier, 
             unexpectedBetweenSpecifierAndLeftParen, 
@@ -1578,12 +1586,13 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
       _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeSpecifier, 
             specifier, 
             unexpectedBetweenSpecifierAndName, 
@@ -1786,12 +1795,13 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       _ unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? = nil,
       rightBrace: TokenSyntax = .rightBraceToken(),
       _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeLeftBrace, 
             leftBrace, 
             unexpectedBetweenLeftBraceAndSignature, 
@@ -1990,12 +2000,13 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       _ unexpectedBetweenParametersAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeLeftParen, 
             leftParen, 
             unexpectedBetweenLeftParenAndParameters, 
@@ -2193,12 +2204,13 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       _ unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeAttributes, 
             attributes, 
             unexpectedBetweenAttributesAndModifiers, 
@@ -2538,12 +2550,13 @@ public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable, _
       _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeName, 
             name, 
             unexpectedBetweenNameAndTrailingComma, 
@@ -2757,12 +2770,13 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       _ unexpectedBetweenReturnClauseAndInKeyword: UnexpectedNodesSyntax? = nil,
       inKeyword: TokenSyntax = .keyword(.in),
       _ unexpectedAfterInKeyword: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeAttributes, 
             attributes, 
             unexpectedBetweenAttributesAndCapture, 
@@ -3119,12 +3133,13 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
       _ unexpectedBetweenItemAndSemicolon: UnexpectedNodesSyntax? = nil,
       semicolon: TokenSyntax? = nil,
       _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeItem, 
             item, 
             unexpectedBetweenItemAndSemicolon, 
@@ -3259,12 +3274,13 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       _ unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? = nil,
       rightBrace: TokenSyntax = .rightBraceToken(),
       _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeLeftBrace, 
             leftBrace, 
             unexpectedBetweenLeftBraceAndStatements, 
@@ -3437,12 +3453,13 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       _ unexpectedBetweenTypeAndAmpersand: UnexpectedNodesSyntax? = nil,
       ampersand: TokenSyntax? = nil,
       _ unexpectedAfterAmpersand: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeType, 
             type, 
             unexpectedBetweenTypeAndAmpersand, 
@@ -3547,12 +3564,13 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
       _ unexpectedBeforeElements: UnexpectedNodesSyntax? = nil,
       elements: CompositionTypeElementListSyntax,
       _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeElements, elements, unexpectedAfterElements))) { (arena, _) in
+    self = withExtendedLifetime((arena, (unexpectedBeforeElements, elements, unexpectedAfterElements))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeElements?.raw, elements.raw, unexpectedAfterElements?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.compositionType,
@@ -3808,12 +3826,13 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       _ unexpectedBetweenConditionAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeCondition, 
             condition, 
             unexpectedBetweenConditionAndTrailingComma, 
@@ -3931,12 +3950,13 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       _ unexpectedBetweenColonAndRightType: UnexpectedNodesSyntax? = nil,
       rightType: some TypeSyntaxProtocol,
       _ unexpectedAfterRightType: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeLeftType, 
             leftType, 
             unexpectedBetweenLeftTypeAndColon, 
@@ -4071,12 +4091,13 @@ public struct ConsumeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       _ unexpectedBetweenConsumeKeywordAndExpression: UnexpectedNodesSyntax? = nil,
       expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeConsumeKeyword, 
             consumeKeyword, 
             unexpectedBetweenConsumeKeywordAndExpression, 
@@ -4189,12 +4210,13 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtS
       _ unexpectedBetweenContinueKeywordAndLabel: UnexpectedNodesSyntax? = nil,
       label: TokenSyntax? = nil,
       _ unexpectedAfterLabel: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeContinueKeyword, 
             continueKeyword, 
             unexpectedBetweenContinueKeywordAndLabel, 
@@ -4324,12 +4346,13 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       _ unexpectedBetweenColonAndCTypeString: UnexpectedNodesSyntax? = nil,
       cTypeString: StringLiteralExprSyntax? = nil,
       _ unexpectedAfterCTypeString: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeConventionLabel, 
             conventionLabel, 
             unexpectedBetweenConventionLabelAndComma, 
@@ -4532,12 +4555,13 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
       _ unexpectedBetweenColonAndProtocolName: UnexpectedNodesSyntax? = nil,
       protocolName: TokenSyntax,
       _ unexpectedAfterProtocolName: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeWitnessMethodLabel, 
             witnessMethodLabel, 
             unexpectedBetweenWitnessMethodLabelAndColon, 
@@ -4678,12 +4702,13 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
       _ unexpectedBetweenCopyKeywordAndExpression: UnexpectedNodesSyntax? = nil,
       expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
+    self = withExtendedLifetime((arena, (
             unexpectedBeforeCopyKeyword, 
             copyKeyword, 
             unexpectedBetweenCopyKeywordAndExpression, 
