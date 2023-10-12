@@ -57,35 +57,20 @@ struct HostCapability {
   var hasExpandMacroResult: Bool { protocolVersion >= 5 }
 }
 
-/// 'CompilerPluginMessageHandler' is a type that listens to the message
-/// connection and dispatches them to the actual plugin provider, then send back
+/// 'CompilerPluginMessageListener' is a type that listens to the message
+/// connection, delegate them to the message handler, then send back
 /// the response.
 ///
-/// The low level connection and the provider is injected by the client.
-public class CompilerPluginMessageHandler<Connection: MessageConnection, Provider: PluginProvider> {
+/// The low level connection and the plugin provider is injected by the client.
+public class CompilerPluginMessageListener<Connection: MessageConnection, Provider: PluginProvider> {
   /// Message channel for bidirectional communication with the plugin host.
   let connection: Connection
 
-  /// Object to provide actual plugin functions.
-  let provider: Provider
-
-  /// Plugin host capability
-  var hostCapability: HostCapability
+  let handler: CompilerPluginMessageHandler<Provider>
 
   public init(connection: Connection, provider: Provider) {
     self.connection = connection
-    self.provider = provider
-    self.hostCapability = HostCapability()
-  }
-}
-
-extension CompilerPluginMessageHandler {
-  func sendMessage(_ message: PluginToHostMessage) throws {
-    try connection.sendMessage(message)
-  }
-
-  func waitForNextMessage() throws -> HostToPluginMessage? {
-    try connection.waitForNextMessage(HostToPluginMessage.self)
+    self.handler = CompilerPluginMessageHandler(provider: provider)
   }
 
   /// Run the main message listener loop.
@@ -93,13 +78,32 @@ extension CompilerPluginMessageHandler {
   /// Throws an error when it failed to send/receive the message, or failed
   /// to serialize/deserialize the message.
   public func main() throws {
-    while let message = try self.waitForNextMessage() {
-      try handleMessage(message)
+    while let message = try connection.waitForNextMessage(HostToPluginMessage.self) {
+      let result = handler.handleMessage(message)
+      try connection.sendMessage(result)
     }
   }
+}
 
+/// 'CompilerPluginMessageHandler' is a type that handle a message and do the
+/// corresponding operation.
+@_spi(Compiler)
+public class CompilerPluginMessageHandler<Provider: PluginProvider> {
+  /// Object to provide actual plugin functions.
+  let provider: Provider
+
+  /// Plugin host capability
+  var hostCapability: HostCapability
+
+  public init(provider: Provider) {
+    self.provider = provider
+    self.hostCapability = HostCapability()
+  }
+}
+
+extension CompilerPluginMessageHandler {
   /// Handles a single message received from the plugin host.
-  fileprivate func handleMessage(_ message: HostToPluginMessage) throws {
+  public func handleMessage(_ message: HostToPluginMessage) -> PluginToHostMessage {
     switch message {
     case .getCapability(let hostCapability):
       // Remember the peer capability if provided.
@@ -112,10 +116,10 @@ extension CompilerPluginMessageHandler {
         protocolVersion: PluginMessage.PROTOCOL_VERSION_NUMBER,
         features: provider.features.map({ $0.rawValue })
       )
-      try self.sendMessage(.getCapabilityResult(capability: capability))
+      return .getCapabilityResult(capability: capability)
 
     case .expandFreestandingMacro(let macro, let macroRole, let discriminator, let expandingSyntax):
-      try expandFreestandingMacro(
+      return expandFreestandingMacro(
         macro: macro,
         macroRole: macroRole,
         discriminator: discriminator,
@@ -132,7 +136,7 @@ extension CompilerPluginMessageHandler {
       let extendedTypeSyntax,
       let conformanceListSyntax
     ):
-      try expandAttachedMacro(
+      return expandAttachedMacro(
         macro: macro,
         macroRole: macroRole,
         discriminator: discriminator,
@@ -159,7 +163,7 @@ extension CompilerPluginMessageHandler {
           )
         )
       }
-      try self.sendMessage(.loadPluginLibraryResult(loaded: diags.isEmpty, diagnostics: diags));
+      return .loadPluginLibraryResult(loaded: diags.isEmpty, diagnostics: diags)
     }
   }
 }

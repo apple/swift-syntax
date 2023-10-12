@@ -29,7 +29,7 @@ extension CompilerPluginMessageHandler {
     macroRole pluginMacroRole: PluginMessage.MacroRole?,
     discriminator: String,
     expandingSyntax: PluginMessage.Syntax
-  ) throws {
+  ) -> PluginToHostMessage {
     let sourceManager = SourceManager()
     let syntax = sourceManager.add(expandingSyntax, foldingWith: .standardOperators)
 
@@ -73,7 +73,7 @@ extension CompilerPluginMessageHandler {
       // TODO: Remove this  when all compilers have 'hasExpandMacroResult'.
       response = .expandFreestandingMacroResult(expandedSource: expandedSource, diagnostics: diagnostics)
     }
-    try self.sendMessage(response)
+    return response
   }
 
   /// Expand `@attached(XXX)` macros.
@@ -86,7 +86,7 @@ extension CompilerPluginMessageHandler {
     parentDeclSyntax: PluginMessage.Syntax?,
     extendedTypeSyntax: PluginMessage.Syntax?,
     conformanceListSyntax: PluginMessage.Syntax?
-  ) throws {
+  ) -> PluginToHostMessage {
     let sourceManager = SourceManager()
     let context = PluginMacroExpansionContext(
       sourceManager: sourceManager,
@@ -150,7 +150,7 @@ extension CompilerPluginMessageHandler {
     } else {
       response = .expandAttachedMacroResult(expandedSources: expandedSources, diagnostics: diagnostics)
     }
-    try self.sendMessage(response)
+    return response
   }
 }
 
