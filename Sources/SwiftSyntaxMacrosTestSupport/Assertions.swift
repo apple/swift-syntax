@@ -15,7 +15,7 @@ import SwiftDiagnostics
 import SwiftParser
 import SwiftParserDiagnostics
 import SwiftSyntax
-import SwiftSyntaxMacroExpansion
+@_spi(MacroExpansion) import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
 import _SwiftSyntaxTestSupport
 

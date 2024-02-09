@@ -13,7 +13,7 @@
 import SwiftDiagnostics
 import SwiftSyntax
 import SwiftSyntaxBuilder
-import SwiftSyntaxMacroExpansion
+@_spi(MacroExpansion) import SwiftSyntaxMacroExpansion
 import XCTest
 import _SwiftSyntaxTestSupport
 

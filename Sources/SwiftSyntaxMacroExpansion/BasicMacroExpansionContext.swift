@@ -17,6 +17,7 @@ import SwiftSyntaxMacros
 
 /// An implementation of the `MacroExpansionContext` protocol that is
 /// suitable for testing purposes.
+@_spi(MacroExpansion)
 public class BasicMacroExpansionContext {
   /// A single source file that is known to the macro expansion context.
   public struct KnownSourceFile {

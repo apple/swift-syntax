@@ -19,7 +19,7 @@
 //==========================================================================//
 
 import SwiftSyntax
-import SwiftSyntaxMacroExpansion
+@_spi(MacroExpansion) import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest

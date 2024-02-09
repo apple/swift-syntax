@@ -14,6 +14,7 @@ import SwiftBasicFormat
 import SwiftSyntax
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
 
+@_spi(MacroExpansion)
 public enum MacroRole: Sendable {
   case expression
   case declaration
@@ -102,6 +103,7 @@ enum MacroExpansionError: Error, CustomStringConvertible {
 /// - Returns: expanded source text. Upon failure (i.e. `definition.expansion()`
 ///   throws) returns `nil`, and the diagnostics representing the `Error` are
 ///   guaranteed to be added to context.
+@_spi(MacroExpansion)
 public func expandFreestandingMacro(
   definition: Macro.Type,
   macroRole: MacroRole,
@@ -153,6 +155,7 @@ public func expandFreestandingMacro(
 /// Try to infer the freestanding macro role from the type definition itself.
 ///
 /// This is a workaround for older compilers with a newer plugin
+@_spi(MacroExpansion)
 public func inferFreestandingMacroRole(definition: Macro.Type) throws -> MacroRole {
   switch definition {
   case is ExpressionMacro.Type: return .expression
@@ -165,6 +168,7 @@ public func inferFreestandingMacroRole(definition: Macro.Type) throws -> MacroRo
 }
 
 @available(*, deprecated, message: "pass a macro role, please!")
+@_spi(MacroExpansion)
 public func expandFreestandingMacro(
   definition: Macro.Type,
   node: FreestandingMacroExpansionSyntax,
@@ -198,6 +202,7 @@ public func expandFreestandingMacro(
 /// - Returns: A list of expanded source text. Upon failure (i.e.
 ///   `definition.expansion()` throws) returns `nil`, and the diagnostics
 ///   representing the `Error` are guaranteed to be added to context.
+@_spi(MacroExpansion)
 public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>(
   definition: Macro.Type,
   macroRole: MacroRole,
@@ -359,6 +364,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
 /// - Returns: expanded source text. Upon failure (i.e. `defintion.expansion()`
 ///   throws) returns `nil`, and the diagnostics representing the `Error` are
 ///   guaranteed to be added to context.
+@_spi(MacroExpansion)
 public func expandAttachedMacro<Context: MacroExpansionContext>(
   definition: Macro.Type,
   macroRole: MacroRole,
@@ -440,6 +446,7 @@ fileprivate extension DeclSyntax {
 }
 
 /// Join `expansions`
+@_spi(MacroExpansion)
 public func collapse<Node: SyntaxProtocol>(
   expansions: [String],
   for role: MacroRole,

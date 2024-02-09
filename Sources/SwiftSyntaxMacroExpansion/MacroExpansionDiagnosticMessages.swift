@@ -13,10 +13,13 @@
 import SwiftSyntaxMacros
 
 @available(*, deprecated, message: "MacroExpansionErrorMessage has been moved to the SwiftSyntaxMacros module")
+@_spi(MacroExpansion)
 public typealias MacroExpansionErrorMessage = SwiftSyntaxMacros.MacroExpansionErrorMessage
 
 @available(*, deprecated, message: "MacroExpansionWarningMessage has been moved to the SwiftSyntaxMacros module")
+@_spi(MacroExpansion)
 public typealias MacroExpansionWarningMessage = SwiftSyntaxMacros.MacroExpansionWarningMessage
 
 @available(*, deprecated, message: "MacroExpansionFixItMessage has been moved to the SwiftSyntaxMacros module")
+@_spi(MacroExpansion)
 public typealias MacroExpansionFixItMessage = SwiftSyntaxMacros.MacroExpansionFixItMessage
