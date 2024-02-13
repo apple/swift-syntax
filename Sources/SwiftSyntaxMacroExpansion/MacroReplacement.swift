@@ -50,6 +50,7 @@ enum MacroExpanderError: DiagnosticMessage {
 }
 
 /// Provide the definition of a macro
+@_spi(MacroExpansion)
 public enum MacroDefinition {
   /// An externally-defined macro, known by its type name and the module in
   /// which that type resides, which uses the deprecated syntax `A.B`.
@@ -247,6 +248,7 @@ extension MacroDeclSyntax {
   ///
   /// If there are an errors that prevent expansion, the diagnostics will be
   /// wrapped into an error that prevents expansion, that error is thrown.
+  @_spi(MacroExpansion)
   public func checkDefinition() throws -> MacroDefinition {
     // Cannot compute replacements for an undefined macro.
     guard let originalDefinition = definition?.value else {
@@ -384,6 +386,7 @@ extension MacroDeclSyntax {
   /// Given a freestanding macro expansion syntax node that references this
   /// macro declaration, expand the macro by substituting the arguments from
   /// the macro expansion into the parameters that are used in the definition.
+  @_spi(MacroExpansion)
   public func expand(
     _ node: some FreestandingMacroExpansionSyntax,
     definition: MacroExpansionExprSyntax,
@@ -402,6 +405,7 @@ extension MacroDeclSyntax {
   /// Given an attached macro expansion syntax node that references this
   /// macro declaration, expand the macro by substituting the arguments from
   /// the expansion into the parameters that are used in the definition.
+  @_spi(MacroExpansion)
   public func expand(
     _ node: AttributeSyntax,
     definition: MacroExpansionExprSyntax,

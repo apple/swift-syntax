@@ -22,6 +22,7 @@ import SwiftSyntaxBuilder
 extension SyntaxProtocol {
   /// Expand all uses of the given set of macros within this syntax node.
   @available(*, deprecated, message: "Use contextGenerator form to produce a specific context for each expansion node")
+  @_spi(MacroExpansion)
   public func expand(
     macros: [String: Macro.Type],
     in context: some MacroExpansionContext,
@@ -35,6 +36,7 @@ extension SyntaxProtocol {
   }
 
   /// Expand all uses of the given set of macros within this syntax node.
+  @_spi(MacroExpansion)
   public func expand<Context: MacroExpansionContext>(
     macros: [String: Macro.Type],
     contextGenerator: @escaping (Syntax) -> Context,
@@ -468,6 +470,7 @@ struct MacroSystem {
 
 /// Removes attributes from a syntax tree while maintaining their surrounding trivia.
 @_spi(Testing)
+@_spi(MacroExpansion)
 public class AttributeRemover: SyntaxRewriter {
   let predicate: (AttributeSyntax) -> Bool
 
