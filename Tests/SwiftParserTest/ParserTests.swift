@@ -85,7 +85,7 @@ class ParserTests: ParserTestCase {
     }
   }
 
-  let packageDir = URL(fileURLWithPath: #file)
+  let packageDir = URL(fileURLWithPath: #filePath)
     .deletingLastPathComponent()
     .deletingLastPathComponent()
     .deletingLastPathComponent()
