@@ -802,11 +802,15 @@ extension DeclModifierSyntax {
     case `private`
     case `public`
     case reasync
+    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
+    #endif
     case _resultDependsOnSelf
     case required
     case `static`
+    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
+    #endif
     case transferring
     case unowned
     case weak
@@ -2626,12 +2630,18 @@ extension LifetimeSpecifierArgumentSyntax {
 extension LifetimeTypeSpecifierSyntax {
   @_spi(Diagnostics)
   public enum SpecifierOptions: TokenSpecSet {
+    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
+    #endif
     case _copy
+    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
+    #endif
     case _consume
     case _borrow
+    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
+    #endif
     case _mutate
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
@@ -2980,11 +2990,17 @@ extension OptionalBindingConditionSyntax {
     case `let`
     case `var`
     case `inout`
+    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
+    #endif
     case _mutating
+    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
+    #endif
     case _borrowing
+    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
+    #endif
     case _consuming
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
@@ -3405,9 +3421,13 @@ extension SimpleTypeSpecifierSyntax {
     case _const
     case borrowing
     case consuming
+    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
+    #endif
     case transferring
+    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
+    #endif
     case _resultDependsOn
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
@@ -3952,11 +3972,17 @@ extension ValueBindingPatternSyntax {
     case `let`
     case `var`
     case `inout`
+    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
+    #endif
     case _mutating
+    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
+    #endif
     case _borrowing
+    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
+    #endif
     case _consuming
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
@@ -4043,11 +4069,17 @@ extension VariableDeclSyntax {
     case `let`
     case `var`
     case `inout`
+    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
+    #endif
     case _mutating
+    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
+    #endif
     case _borrowing
+    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
+    #endif
     case _consuming
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
