@@ -534,18 +534,56 @@ class ValidateSyntaxNodes: XCTestCase {
       failures,
       expectedFailures: [
         ValidationFailure(node: .accessorParameters, message: "could conform to trait 'NamedDecl' but does not"),
+        ValidationFailure(node: .arrayElement, message: "could conform to trait 'EffectfulExpr' but does not"),
+        ValidationFailure(node: .asExpr, message: "could conform to trait 'EffectfulExpr' but does not"),
         ValidationFailure(node: .availabilityCondition, message: "could conform to trait 'Parenthesized' but does not"),
+        ValidationFailure(node: .borrowExpr, message: "could conform to trait 'EffectfulExpr' but does not"),
         ValidationFailure(node: ._canImportExpr, message: "could conform to trait 'Parenthesized' but does not"),
+        ValidationFailure(node: .closureCapture, message: "could conform to trait 'EffectfulExpr' but does not"),
+        ValidationFailure(node: .consumeExpr, message: "could conform to trait 'EffectfulExpr' but does not"),
+        ValidationFailure(node: .copyExpr, message: "could conform to trait 'EffectfulExpr' but does not"),
         ValidationFailure(
           node: .differentiabilityArguments,
           message: "could conform to trait 'Parenthesized' but does not"
         ),
+        ValidationFailure(node: .discardStmt, message: "could conform to trait 'EffectfulExpr' but does not"),
         ValidationFailure(node: .editorPlaceholderDecl, message: "could conform to trait 'MissingNode' but does not"),
         ValidationFailure(node: .editorPlaceholderExpr, message: "could conform to trait 'MissingNode' but does not"),
         ValidationFailure(node: .enumCaseElement, message: "could conform to trait 'NamedDecl' but does not"),
+        ValidationFailure(
+          node: .expressionPattern,
+          message: "could conform to trait 'EffectfulExpr' but does not"
+        ),
+        ValidationFailure(node: .expressionStmt, message: "could conform to trait 'EffectfulExpr' but does not"),
+        ValidationFailure(node: .forceUnwrapExpr, message: "could conform to trait 'EffectfulExpr' but does not"),
         ValidationFailure(node: .genericParameter, message: "could conform to trait 'NamedDecl' but does not"),
+        ValidationFailure(
+          node: .genericSpecializationExpr,
+          message: "could conform to trait 'EffectfulExpr' but does not"
+        ),
+        ValidationFailure(node: .inOutExpr, message: "could conform to trait 'EffectfulExpr' but does not"),
+        ValidationFailure(node: .isExpr, message: "could conform to trait 'EffectfulExpr' but does not"),
+        ValidationFailure(node: .labeledExpr, message: "could conform to trait 'EffectfulExpr' but does not"),
+        ValidationFailure(
+          node: .optionalChainingExpr,
+          message: "could conform to trait 'EffectfulExpr' but does not"
+        ),
+        ValidationFailure(
+          node: .postfixOperatorExpr,
+          message: "could conform to trait 'EffectfulExpr' but does not"
+        ),
+        ValidationFailure(
+          node: .prefixOperatorExpr,
+          message: "could conform to trait 'EffectfulExpr' but does not"
+        ),
         ValidationFailure(node: .precedenceGroupName, message: "could conform to trait 'NamedDecl' but does not"),
         ValidationFailure(node: .primaryAssociatedType, message: "could conform to trait 'NamedDecl' but does not"),
+        ValidationFailure(node: .thenStmt, message: "could conform to trait 'EffectfulExpr' but does not"),
+        ValidationFailure(node: .throwStmt, message: "could conform to trait 'EffectfulExpr' but does not"),
+        ValidationFailure(
+          node: .yieldedExpression,
+          message: "could conform to trait 'EffectfulExpr' but does not"
+        ),
         ValidationFailure(
           node: .yieldedExpressionsClause,
           message: "could conform to trait 'Parenthesized' but does not"
