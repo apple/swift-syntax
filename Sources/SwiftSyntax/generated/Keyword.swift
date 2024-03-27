@@ -20,18 +20,26 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case _alignment
   case _backDeploy
   case _borrow
+  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
+  #endif
   case _borrowing
   case _BridgeObject
   case _cdecl
   case _Class
   case _compilerInitialized
   case _const
+  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
+  #endif
   case _consume
+  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
+  #endif
   case _consuming
+  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
+  #endif
   case _copy
   case _documentation
   case _dynamicReplacement
@@ -43,9 +51,13 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case _local
   case _modify
   case _move
+  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
+  #endif
   case _mutate
+  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
+  #endif
   case _mutating
   case _NativeClass
   case _NativeRefCountedObject
@@ -191,9 +203,13 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case renamed
   case `repeat`
   case required
+  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
+  #endif
   case _resultDependsOn
+  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
+  #endif
   case _resultDependsOnSelf
   case `rethrows`
   case retroactive
@@ -219,7 +235,9 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case then
   case `throw`
   case `throws`
+  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
+  #endif
   case transferring
   case transpose
   case `true`
