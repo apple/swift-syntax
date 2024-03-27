@@ -67,6 +67,13 @@ public let TRAITS: [Trait] = [
     ]
   ),
   Trait(
+    traitName: "EffectfulExpr",
+    documentation: "Syntax trait for effectful expressions, such as `try` and `await`.",
+    children: [
+      Child(name: "expression", kind: .node(kind: .expr))
+    ]
+  ),
+  Trait(
     traitName: "EffectSpecifiers",
     children: [
       Child(name: "unexpectedBeforeAsyncSpecifier", kind: .node(kind: .unexpectedNodes), isOptional: true),

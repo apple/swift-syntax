@@ -132,6 +132,43 @@ public extension SyntaxProtocol {
   }
 }
 
+// MARK: - EffectfulExprSyntax
+
+/// Syntax trait for effectful expressions, such as `try` and `await`.
+public protocol EffectfulExprSyntax: SyntaxProtocol {
+  var expression: ExprSyntax {
+    get
+    set
+  }
+}
+
+public extension EffectfulExprSyntax {
+  /// Without this function, the `with` function defined on `SyntaxProtocol`
+  /// does not work on existentials of this protocol type.
+  @_disfavoredOverload
+  func with<T>(_ keyPath: WritableKeyPath<EffectfulExprSyntax, T>, _ newChild: T) -> EffectfulExprSyntax {
+    var copy: EffectfulExprSyntax = self
+    copy[keyPath: keyPath] = newChild
+    return copy
+  }
+}
+
+public extension SyntaxProtocol {
+  /// Check whether the non-type erased version of this syntax node conforms to
+  /// `EffectfulExprSyntax`.
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_: EffectfulExprSyntax.Protocol) -> Bool {
+    return self.asProtocol(EffectfulExprSyntax.self) != nil
+  }
+  
+  /// Return the non-type erased version of this syntax node if it conforms to
+  /// `EffectfulExprSyntax`. Otherwise return `nil`.
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_: EffectfulExprSyntax.Protocol) -> EffectfulExprSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? EffectfulExprSyntax
+  }
+}
+
 // MARK: - EffectSpecifiersSyntax
 
 public protocol EffectSpecifiersSyntax: SyntaxProtocol {
@@ -689,6 +726,8 @@ extension AttributedTypeSyntax: WithAttributesSyntax {}
 
 extension AvailabilityArgumentSyntax: WithTrailingCommaSyntax {}
 
+extension AwaitExprSyntax: EffectfulExprSyntax {}
+
 extension CatchClauseSyntax: WithCodeBlockSyntax {}
 
 extension CatchItemSyntax: WithTrailingCommaSyntax {}
@@ -830,6 +869,8 @@ extension SwitchCaseItemSyntax: WithTrailingCommaSyntax {}
 extension SwitchCaseSyntax: WithStatementsSyntax {}
 
 extension SwitchExprSyntax: BracedSyntax {}
+
+extension TryExprSyntax: EffectfulExprSyntax {}
 
 extension TupleExprSyntax: ParenthesizedSyntax {}
 
