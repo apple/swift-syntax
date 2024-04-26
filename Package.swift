@@ -18,6 +18,7 @@ let package = Package(
     .library(name: "SwiftCompilerPluginMessageHandling", targets: ["SwiftCompilerPluginMessageHandling"]),
     .library(name: "SwiftDiagnostics", targets: ["SwiftDiagnostics"]),
     .library(name: "SwiftIDEUtils", targets: ["SwiftIDEUtils"]),
+    .library(name: "SwiftIfConfig", targets: ["SwiftIfConfig"]),
     .library(name: "SwiftOperators", targets: ["SwiftOperators"]),
     .library(name: "SwiftParser", targets: ["SwiftParser"]),
     .library(name: "SwiftParserDiagnostics", targets: ["SwiftParserDiagnostics"]),
@@ -125,6 +126,19 @@ let package = Package(
     .testTarget(
       name: "SwiftIDEUtilsTest",
       dependencies: ["_SwiftSyntaxTestSupport", "SwiftIDEUtils", "SwiftParser", "SwiftSyntax"]
+    ),
+
+    // MARK: SwiftIfConfig
+
+    .target(
+      name: "SwiftIfConfig",
+      dependencies: ["SwiftSyntax", "SwiftOperators"],
+      exclude: ["CMakeLists.txt"]
+    ),
+
+    .testTarget(
+      name: "SwiftIfConfigTest",
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftIfConfig", "SwiftParser"]
     ),
 
     // MARK: SwiftSyntax
