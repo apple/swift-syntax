@@ -48,9 +48,14 @@ extension Parser {
           )
         )
       } while keepGoing != nil && self.hasProgressed(&availabilityArgumentProgress)
+        && !self.atAvailabilitySpecListTerminator()
     }
 
     return RawAvailabilityArgumentListSyntax(elements: elements, arena: self.arena)
+  }
+
+  mutating func atAvailabilitySpecListTerminator() -> Bool {
+    return self.experimentalFeatures.contains(.trailingComma) && self.at(.rightParen)
   }
 
   enum AvailabilityArgumentKind: TokenSpecSet {

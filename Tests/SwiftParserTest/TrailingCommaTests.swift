@@ -231,4 +231,143 @@ final class TrailingCommaTests: ParserTestCase {
   func testWhileConditions() {
     assertParse("while true, { print(0) }")
   }
+
+  func testSubscriptArguments() {
+    assertParse("d[1, 2,]")
+  }
+
+  func testStringLiteralInterpolation() {
+    assertParse(#""\(1, 2,)""#)
+  }
+
+  func testKeyPathExpressionArguments() {
+    assertParse(
+      """
+      \\Foo.bar[0,]
+      """
+    )
+  }
+
+  func testAttributesArguments() {
+    assertParse("@Foo(a, b, c,) struct S { }")
+  }
+
+  func testTypeAttribute() {
+    assertParse("f(_: @foo(1, 2,) Int)")
+  }
+
+  func testMacroExpansionExpressionArguments() {
+    assertParse(
+      """
+      #foo(1, 2,)
+      """
+    )
+  }
+
+  func testMacroExpansionDeclarationArguments() {
+    assertParse(
+      """
+      struct S {
+      #foo(1, 2,)
+      }
+      """
+    )
+  }
+
+  func testMacroRoleArguments() {
+    assertParse(
+      """
+      @attached(extension, conformances: OptionSet,)
+      public macro OptionSet<RawType>() = #externalMacro(module: "SwiftMacros", type: "OptionSetMacro")
+      """
+    )
+  }
+
+  func testGenericParameters() {
+    assertParse(
+      """
+      struct S<T1, T2,> { }
+      """
+    )
+  }
+
+  func testSwitchCaseLabel() {
+    assertParse(
+      """
+      switch number {
+      case 1, 2,:
+          break
+      default:
+          break
+      }
+      """
+    )
+  }
+
+  func testClosureCaptureList() {
+    assertParse(
+      """
+      { [obj1, obj2,] in }
+      """
+    )
+  }
+
+  func testEnumCaseDeclaration() {
+    assertParse(
+      """
+      enum E { case a, b, c, }
+      """
+    )
+
+    assertParse(
+      """
+      enum E {
+          case a, b, c,
+          func f() {}
+      }
+      """
+    )
+
+    assertParse(
+      """
+      enum E { case a, b, c,; func f() {} }
+      """
+    )
+  }
+
+  func testInheritance() {
+    assertParse(
+      """
+      struct T: P1, P2, { }
+      """
+    )
+
+    assertParse(
+      """
+      struct T: P1, P2, where P1: Equatable, P2: Equatable { }
+      """
+    )
+  }
+
+  func testGenericWhereClause() {
+    assertParse(
+      """
+      struct T: P1, P2, where P1: Equatable, P2: Equatable, { }
+      """
+    )
+  }
+
+  func testAvailabilityArgumentSpecList() {
+    assertParse(
+      """
+      if #available(iOS 15, watchOS 9, *,) { }
+      """
+    )
+
+    assertParse(
+      """
+      if #unavailable(iOS 15, watchOS 9,) { }
+      """
+    )
+  }
 }

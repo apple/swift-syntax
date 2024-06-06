@@ -492,7 +492,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && self.hasProgressed(&loopProgress)
+      } while keepGoing != nil && self.hasProgressed(&loopProgress) && !atGenericParametersListTerminator()
     }
 
     let whereClause: RawGenericWhereClauseSyntax?
@@ -517,6 +517,10 @@ extension Parser {
       rightAngle: rangle,
       arena: self.arena
     )
+  }
+
+  mutating func atGenericParametersListTerminator() -> Bool {
+    return self.experimentalFeatures.contains(.trailingComma) && self.at(prefix: ">")
   }
 
   mutating func parseGenericWhereClause() -> RawGenericWhereClauseSyntax {
@@ -700,7 +704,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && self.hasProgressed(&loopProgress)
+      } while keepGoing != nil && self.hasProgressed(&loopProgress) && !self.atWhereClauseListTerminator()
     }
 
     return RawGenericWhereClauseSyntax(
@@ -709,6 +713,10 @@ extension Parser {
       requirements: RawGenericRequirementListSyntax(elements: elements, arena: self.arena),
       arena: self.arena
     )
+  }
+
+  mutating func atWhereClauseListTerminator() -> Bool {
+    return self.at(.leftBrace)
   }
 }
 
@@ -867,7 +875,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && self.hasProgressed(&loopProgress)
+      } while keepGoing != nil && self.hasProgressed(&loopProgress) && !atEnumCaseListTerminator()
     }
 
     return RawEnumCaseDeclSyntax(
@@ -878,6 +886,11 @@ extension Parser {
       elements: RawEnumCaseElementListSyntax(elements: elements, arena: self.arena),
       arena: self.arena
     )
+  }
+
+  mutating func atEnumCaseListTerminator() -> Bool {
+    return self.experimentalFeatures.contains(.trailingComma)
+      && (self.atStartOfLine || self.at(.rightBrace) || self.at(.semicolon))
   }
 
   /// Parse an associated type declaration.
@@ -2029,7 +2042,10 @@ extension Parser {
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?
     if leftParen != nil {
-      args = parseArgumentListElements(pattern: .none, allowTrailingComma: false)
+      args = parseArgumentListElements(
+        pattern: .none,
+        allowTrailingComma: self.experimentalFeatures.contains(.trailingComma)
+      )
       (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     } else {
       args = []

@@ -376,7 +376,10 @@ extension Parser {
       }
     case nil:
       return parseAttribute(argumentMode: .customAttribute) { parser in
-        let arguments = parser.parseArgumentListElements(pattern: .none, allowTrailingComma: false)
+        let arguments = parser.parseArgumentListElements(
+          pattern: .none,
+          allowTrailingComma: parser.experimentalFeatures.contains(.trailingComma)
+        )
         return .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena))
       }
     }
@@ -427,7 +430,7 @@ extension Parser {
     let additionalArgs = self.parseArgumentListElements(
       pattern: .none,
       flavor: .attributeArguments,
-      allowTrailingComma: false
+      allowTrailingComma: self.experimentalFeatures.contains(.trailingComma)
     )
     return [roleElement] + additionalArgs
   }
