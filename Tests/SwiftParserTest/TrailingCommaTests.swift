@@ -250,6 +250,49 @@ final class TrailingCommaTests: ParserTestCase {
 
   func testAttributesArguments() {
     assertParse("@Foo(a, b, c,) struct S { }")
+
+    assertParse(
+      """
+      @available(iOS 15, *,)
+      @backDeployed(before: iOS 17,)
+      func foo() { }
+      """
+    )
+
+    assertParse(
+      """
+      @_originallyDefinedIn(module: "ToasterKit", toasterOS 57, bowlOS 69, mugOS 69,)
+      enum Toast { }
+      """
+    )
+
+    assertParse(
+      """
+      @_documentation(visibility: internal, metadata: "this is a longer string",) public class OtherClass {}
+      """
+    )
+
+    assertParse(
+      """
+      func f(in: @differentiable(reverse,) (Int) -> Int) { }
+      """
+    )
+
+    assertParse(
+      """
+      @derivative(of: Self.other,)
+      func foo() {}
+      """
+    )
+
+    assertParse(
+      """
+      @transpose(of: S.instanceMethod,)
+      static func transposeInstanceMethodWrtSelf(_ other: S, t: S) -> S {
+        other + t
+      }
+      """
+    )
   }
 
   func testTypeAttribute() {
