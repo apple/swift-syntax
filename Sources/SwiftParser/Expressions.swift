@@ -1749,7 +1749,7 @@ extension Parser {
               arena: self.arena
             )
           )
-        } while keepGoing != nil && self.hasProgressed(&loopProgress) && !self.atCaptureListTerminator()
+        } while keepGoing != nil && !self.atCaptureListTerminator() && self.hasProgressed(&loopProgress)
       }
       // We were promised a right square bracket, so we're going to get it.
       var unexpectedNodes = [RawSyntax]()
@@ -2396,7 +2396,7 @@ extension Parser {
         } else {
           unexpectedPrePatternCase = nil
         }
-      } while keepGoing != nil && self.hasProgressed(&loopProgress) && !self.atSwitchCaseListTerminator()
+      } while keepGoing != nil && !self.atSwitchCaseListTerminator() && self.hasProgressed(&loopProgress)
     }
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     return RawSwitchCaseLabelSyntax(

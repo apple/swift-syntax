@@ -492,7 +492,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && self.hasProgressed(&loopProgress) && !atGenericParametersListTerminator()
+      } while keepGoing != nil && !atGenericParametersListTerminator() && self.hasProgressed(&loopProgress)
     }
 
     let whereClause: RawGenericWhereClauseSyntax?
@@ -704,7 +704,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && self.hasProgressed(&loopProgress) && !self.atWhereClauseListTerminator()
+      } while keepGoing != nil && !self.atWhereClauseListTerminator() && self.hasProgressed(&loopProgress)
     }
 
     return RawGenericWhereClauseSyntax(
@@ -875,7 +875,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && self.hasProgressed(&loopProgress) && !atEnumCaseListTerminator()
+      } while keepGoing != nil && !atEnumCaseListTerminator() && self.hasProgressed(&loopProgress)
     }
 
     return RawEnumCaseDeclSyntax(

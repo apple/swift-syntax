@@ -315,7 +315,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && self.hasProgressed(&loopProgress) && !self.atInheritanceListTerminator()
+      } while keepGoing != nil && !self.atInheritanceListTerminator() && self.hasProgressed(&loopProgress)
     }
 
     let unexpectedAfterInheritedTypeCollection: RawUnexpectedNodesSyntax?

@@ -47,8 +47,8 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && self.hasProgressed(&availabilityArgumentProgress)
-        && !self.atAvailabilitySpecListTerminator()
+      } while keepGoing != nil && !self.atAvailabilitySpecListTerminator()
+        && self.hasProgressed(&availabilityArgumentProgress)
     }
 
     return RawAvailabilityArgumentListSyntax(elements: elements, arena: self.arena)
