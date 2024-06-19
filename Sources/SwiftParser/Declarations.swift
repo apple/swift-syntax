@@ -875,7 +875,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && !atEnumCaseListTerminator() && self.hasProgressed(&loopProgress)
+      } while keepGoing != nil && self.hasProgressed(&loopProgress)
     }
 
     return RawEnumCaseDeclSyntax(
@@ -886,11 +886,6 @@ extension Parser {
       elements: RawEnumCaseElementListSyntax(elements: elements, arena: self.arena),
       arena: self.arena
     )
-  }
-
-  mutating func atEnumCaseListTerminator() -> Bool {
-    return self.experimentalFeatures.contains(.trailingComma)
-      && (self.atStartOfLine || self.at(.rightBrace) || self.at(.semicolon))
   }
 
   /// Parse an associated type declaration.

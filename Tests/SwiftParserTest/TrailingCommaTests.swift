@@ -312,29 +312,6 @@ final class TrailingCommaTests: ParserTestCase {
     )
   }
 
-  func testEnumCaseDeclaration() {
-    assertParse(
-      """
-      enum E { case a, b, c, }
-      """
-    )
-
-    assertParse(
-      """
-      enum E {
-          case a, b, c,
-          func f() {}
-      }
-      """
-    )
-
-    assertParse(
-      """
-      enum E { case a, b, c,; func f() {} }
-      """
-    )
-  }
-
   func testInheritance() {
     assertParse(
       """
